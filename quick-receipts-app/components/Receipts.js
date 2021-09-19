@@ -10,14 +10,20 @@ export default Receipts = ({ navigation }) => {
     useEffect(() => {
         fetch('https://tarn-app-server-api.herokuapp.com/receipts')
             .then((response) => response.json())
-            .then((json) => { json.reverse(); json.forEach(d => {
-                d["total"] = d.items.map(item => item.value).reduce((prev, next) => Number(prev) + Number(next));
-            });  setData(json) })
+            .then((json) => {
+                json.reverse(); json.forEach(d => {
+                    d["total"] = d.items.map(item => item.value).reduce((prev, next) => Number(prev) + Number(next));
+
+                    d.total = d.total.toFixed(2);
+                }); 
+                
+                setData(json)
+            })
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
     }, []);
 
-    
+
 
     return (
         <ScrollView>
@@ -48,8 +54,8 @@ export default Receipts = ({ navigation }) => {
                                             />
                                             <Text> ###########################################</Text>
 
-                                            <Text style={{ textAlign: 'right' }}>SubTotal: { data.total }</Text>
-                                            <Text style={{ textAlign: 'right' }}>Total: { data.total }</Text>
+                                            <Text style={{ textAlign: 'right' }}>SubTotal: {data.total}</Text>
+                                            <Text style={{ textAlign: 'right' }}>Total: {data.total}</Text>
 
                                         </View>
                                     )
