@@ -1,31 +1,34 @@
 import React from 'react';
+import Home from './components/Home';
+import Camera from './components/Camera';
+import Receipts from './components/Receipts';
+
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 
 export default class App extends React.Component {
   render() {
   return (
-    <View style={styles.container}>
-      
-      <View style={styles.logoWrapper}>
-      
-      <Image 
-        style= {{ width: 50, height: 45}}
-        source= {require('./assets/logo_final.png')} />
-        
-        <Text style={styles.title} >QuickReceipts</Text>
-      
-      </View>
-
-      <TouchableOpacity>
-        <View style={styles.appButtonContainer}>
-        <Text style={styles.appButtonText}>Start</Text>
-        </View>
-      </TouchableOpacity>
-     
-      
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ title: 'Welcome' }}
+        />
+        <Stack.Screen
+          name="Camera"
+          component={Camera}
+          options={{ title: 'Camera' }}
+        />
+        <Stack.Screen name="Receipts" component={Receipts} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
   }
 }
@@ -35,45 +38,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1A1A1A',
     
-  },
-  title: {
-    fontFamily: 'normal',
-  
-    fontSize: 34,
-    color: "#FFFFFF",
-    
-  },
-  logoWrapper:{
-    paddingTop: 140,
-    paddingHorizontal: 70,
-    flexDirection: 'row',
-    alignItems: 'center',
-
-  },
-  appButtonContainer:{
-    position: 'absolute',
-    bottom:-550,
-    left:150,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 20,
-    elevation: 3,
-    backgroundColor: 'white',
-
-
-  },
-  appButtonText:{
-    fontSize: 20,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-    color: 'black',
-
-    
-    
-
-},
-  
+  }
 });
