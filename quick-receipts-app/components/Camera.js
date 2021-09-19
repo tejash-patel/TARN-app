@@ -1,31 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button, FlatList, ScrollView, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 export default Camera = ({ navigation }) => {
-    const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState([]);
-    console.log(data);
+    const [hasPermission, setHasPermission] = useState(null);
+    const [scanned, setScanned] = useState(false);
+
+    
 
     useEffect(() => {
-        fetch('https://tarn-app-server-api.herokuapp.com/receipts')
-            .then((response) => response.json())
-            .then((json) => {json.reverse(); setData(json)})
-            .catch((error) => console.error(error))
-            .finally(() => setLoading(false));
+        (async () => {
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            setHasPermission(status === 'granted');
+        })();
     }, []);
 
-    return (
-        <SafeAreaView>
-            <Text>This screen will show camera</Text>
-        </SafeAreaView>
+    const handleBarCodeScanned = ({ type, data }) => {
+        setScanned(true);
+        fetch('https://tarn-app-server-api.herokuapp.com/receipts', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: data
+        });
+        console.log(data);
+        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    };
 
+    if (hasPermission === null) {
+        return <Text>Requesting for camera permission</Text>;
+    }
+    if (hasPermission === false) {
+        return <Text>No access to camera</Text>;
+    }
+
+    return (
+        <View style={styles.container}>
+            <BarCodeScanner
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                style={StyleSheet.absoluteFillObject}
+            />
+            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+        </View>
     );
 }
 
-
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
-        backgroundColor: '#1A1A1A',
-    }
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff',
+    },
+    barCodeView: {
+        width: '100%',
+        height: '50%',
+        marginBottom: 40
+    },
 });
