@@ -88,15 +88,16 @@ export class ReceiptsService {
     return parsedReceipts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} receipt`;
+  async findOne(id: number) {
+    return await this.unfoldItems(await this._receiptsRepository.findOne(id));
   }
 
   update(id: number, updateReceiptDto: UpdateReceiptDto) {
     return `Error: Receipts are immutable`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} receipt`;
+  async remove(id: number) {
+    await this._receiptsRepository.delete(id);
+    return `Successfully deleted receipt id ` + id.toString();
   }
 }
