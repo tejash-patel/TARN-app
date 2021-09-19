@@ -42,7 +42,6 @@ export class ReceiptsService {
     let newItems = [];
 
     for (let x = 0; x < createReceiptDto.items.length; x++) {
-      console.log(createReceiptDto.items[x]);
       var newItem = await this.createItem(createReceiptDto.items[x]);
       newItemIds.push(newItem.id);
       newItems.push(newItem);
@@ -61,8 +60,32 @@ export class ReceiptsService {
     return newReceipt;
   }
 
+  async unfoldItems(receipt: ReceiptsEntity) {
+    let newReceipt = {};
+    newReceipt["storeName"] = receipt.storeName;
+    newReceipt["address"] = receipt.address;
+    newReceipt["phone"] = receipt.phone;
+    newReceipt["postalCode"] = receipt.postalCode;
+    newReceipt["cashierId"] = receipt.cashierId;
+    newReceipt["logoURL"] = receipt.logoURL;
+    newReceipt["transactionTime"] = receipt.transactionTime;
+    newReceipt["id"] = receipt.id;
+
+    let itemIds = receipt.itemIds.split(",");
+    let items = await this._itemsRepository.findByIds(itemIds);
+
+    newReceipt["items"] = items;
+
+    return newReceipt;
+  }
+
   async findAll() {
-    return await this._receiptsRepository.find();
+    let allReceipts = await this._receiptsRepository.find();
+    let parsedReceipts = [];
+    for (let x = 0; x < allReceipts.length; x++) {
+      parsedReceipts.push(await this.unfoldItems(allReceipts[x]));
+    }
+    return parsedReceipts;
   }
 
   findOne(id: number) {
