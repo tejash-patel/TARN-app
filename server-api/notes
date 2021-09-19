@@ -1,0 +1,14 @@
+Item columns:
+    Name                    | String
+    Value                   | Number
+    Quantity                | Number
+
+Receipt columns:
+    List of items           | String
+    Time of transaction     | Date
+    Store Name              | String
+    Store Address           | String
+    Phone Number            | Number
+    Postal Code             | String
+    Cashier's Name/Id       | String
+    Image url for logo      | String

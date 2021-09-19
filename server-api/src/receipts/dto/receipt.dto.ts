@@ -7,13 +7,27 @@ export class Receipt {
   id: number;
 
   @ApiProperty()
-  createdAt: Date;
+  itemIds: string; // Comma separated list of ids
 
   @ApiProperty()
-  updatedAt: Date;
-  @ApiProperty()
-  title: string;
+  storeName: string;
 
   @ApiProperty()
-  content: string;
+  address: string;
+
+  @ApiProperty()
+  phone: number;
+
+  @ApiProperty()
+  postalCode: number;
+
+  @ApiProperty()
+  cashierId: string;
+
+  @ApiProperty()
+  logoURL: string; // Image URL to be inserted onto the receipt for the logo
+
+  @ApiProperty()
+  transactionTime: Date;
+
 }

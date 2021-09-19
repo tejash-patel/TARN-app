@@ -4,22 +4,34 @@ import {
     Entity,
     PrimaryColumn,
     UpdateDateColumn,
-  } from 'typeorm';
-  
-  @Entity('Receipts')
-  export class ReceiptsEntity {
+} from 'typeorm';
+
+@Entity('receipts')
+export class ReceiptsEntity {
     @PrimaryColumn({ generated: true })
     id: number;
-  
+
     @Column()
-    content: string;
-  
+    itemIds: string; // Comma separated list of ids
+
     @Column()
-    title: string;
-  
+    storeName: string;
+
+    @Column()
+    address: string;
+
+    @Column()
+    phone: string;
+
+    @Column()
+    postalCode: string;
+
+    @Column()
+    cashierId: string;
+
+    @Column()
+    logoURL: string; // Image URL to be inserted onto the receipt for the logo
+
     @CreateDateColumn()
-    createdAt: Date;
-  
-    @UpdateDateColumn()
-    updatedAt: Date;
-  }
+    transactionTime: Date;
+}
