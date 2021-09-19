@@ -88,6 +88,24 @@ export class ReceiptsService {
     return parsedReceipts;
   }
 
+  async findAllItems() {
+    return await this._itemsRepository.find();
+  }
+
+  async purgeItems() {
+    let allItems = await this._itemsRepository.find();
+
+    for (let x = 0; x < allItems.length; x++) {
+      let receipt = await this._receiptsRepository.findOne(allItems[x].receiptId);
+      console.log(receipt);
+      if (!receipt) {
+        this._itemsRepository.delete(allItems[x].id);
+      }
+    }
+
+    return 'Successfully deleted hanging items';
+  }
+
   async findOne(id: number) {
     return await this.unfoldItems(await this._receiptsRepository.findOne(id));
   }
