@@ -6,7 +6,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('receipts')
+@Entity('Receipts')
 export class ReceiptsEntity {
     @PrimaryColumn({ generated: true })
     id: number;

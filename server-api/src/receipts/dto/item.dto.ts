@@ -1,6 +1,7 @@
 import {
     ApiProperty
 } from '@nestjs/swagger';
+import { StringDecoder } from 'string_decoder';
 
 export class Item {
     @ApiProperty()
@@ -10,7 +11,7 @@ export class Item {
     name: string;
 
     @ApiProperty()
-    value: number;
+    value: string;
 
     @ApiProperty()
     quantity: number;

@@ -19,7 +19,7 @@ export class itemsEntity {
     name: string;
 
     @Column()
-    value: number;
+    value: string;
 
     @Column()
     quantity: number;

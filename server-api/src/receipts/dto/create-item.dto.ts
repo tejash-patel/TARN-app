@@ -13,7 +13,7 @@ export class CreateItemDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsNumber()
-    value: number;
+    value: string;
 
     @ApiProperty()
     @IsNotEmpty()
