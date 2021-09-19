@@ -6,42 +6,61 @@ export default Receipts = ({ navigation }) => {
     const [data, setData] = useState([]);
     console.log(data);
 
+
     useEffect(() => {
         fetch('https://tarn-app-server-api.herokuapp.com/receipts')
             .then((response) => response.json())
-            .then((json) => {json.reverse(); setData(json)})
+            .then((json) => { json.reverse(); json.forEach(d => {
+                d["total"] = d.items.map(item => item.value).reduce((prev, next) => Number(prev) + Number(next));
+            });  setData(json) })
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
     }, []);
 
+    
+
     return (
-        <SafeAreaView>
-            <View style={styles.container}>
-                {isLoading ? <Text>Loading...</Text> :
-                    (<View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+        <ScrollView>
+            <SafeAreaView>
+                <View style={styles.container}>
+                    {isLoading ? <Text>Loading...</Text> :
+                        (<View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
 
-                        {
-                        data.map((data, index) => {
-                            return (
-                                <View key = {data.id} style={{ backgroundColor: 'white', paddingBottom: 20, margin: 20 }}>
-                                <Text style={{ fontSize: 18, color: 'green', textAlign: 'center' }}>{data.storeName}</Text>
-                                <Text style={{ fontSize: 14, color: 'green', textAlign: 'center', paddingBottom: 10 }}>Articles:</Text>
-                                <FlatList
-                                    data={data.items}
-                                    keyExtractor={({ id }, index) => id}
-                                    renderItem={({ item }) => (
-                                        <Text>{item.name + '. ' + item.value}</Text>
-                                    )}
-                                />
-                            </View>
-                                )
-                        })}
+                            {
+                                data.map((data, index) => {
+                                    return (
+                                        <View key={data.id} style={{ backgroundColor: 'white', paddingBottom: 20, margin: 20 }}>
+                                            <Text style={{ fontSize: 18, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{data.storeName}</Text>
+                                            <Text style={{ fontSize: 18, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{"Address:" + data.address}</Text>
 
-                    </View>
+                                            <Text> ###########################################</Text>
 
-                    )}
-            </View>
-        </SafeAreaView>
+                                            <FlatList
+                                                data={data.items}
+                                                keyExtractor={({ id }, index) => id}
+                                                renderItem={({ item }) => (
+                                                    <View>
+                                                        <Text>{'QTY: ' + item.quantity + ' -- ' + item.name}</Text>
+                                                        <Text style={{ textAlign: 'right' }}>{'$ ' + item.value} </Text>
+                                                    </View>
+
+                                                )}
+                                            />
+                                            <Text> ###########################################</Text>
+
+                                            <Text style={{ textAlign: 'right' }}>SubTotal: { data.total }</Text>
+                                            <Text style={{ textAlign: 'right' }}>Total: { data.total }</Text>
+
+                                        </View>
+                                    )
+                                })}
+
+                        </View>
+
+                        )}
+                </View>
+            </SafeAreaView>
+        </ScrollView>
 
     );
 }

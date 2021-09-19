@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 3,
     backgroundColor: 'white',
+    justifyContent: 'space-between',
+    marginBottom: 20,
 
 
   },
